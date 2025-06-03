@@ -4,6 +4,16 @@ from tkcalendar import Calendar
 import json
 import os
 
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#   Storage file check
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+event_data = 'data.json' # storage file
+
+if not os.path.exists(event_data): # checks if file doesn't exist
+    with open(event_data, 'w') as file: # creates a file with write mode
+        json.dump({}, file) # initialize empty JSON file 
+
 #------------------------------------------------------>
 #   Setup GUI window
 #------------------------------------------------------>
