@@ -29,8 +29,18 @@ title = ctk.CTkLabel(main_frame, text='LifeStyle Planner')
 title.pack(padx=10, pady=10)
 
 #------------------------------------------------------>
-#
+#   Calendar
 #------------------------------------------------------>
+
+cal = Calendar(main_frame,
+                width=400,
+                cursor='hand2',
+                font=('Segoe UI', 14),
+                selectmode='day',
+                background="#2e3036",
+                foreground="#B3B7B9"              
+                )
+cal.pack(fill='x', expand=True, padx=5, pady=5)
 
 #------------------------------------------------------>
 #
