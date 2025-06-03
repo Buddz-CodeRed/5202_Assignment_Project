@@ -19,8 +19,14 @@ height = 830
 root.geometry(f"{(width)}x{(height)}")
 
 #------------------------------------------------------>
-#
+#   App Title | Main Frame
 #------------------------------------------------------>
+
+main_frame = ctk.CTkFrame(root)
+main_frame.pack(fill='both', expand=True)
+
+title = ctk.CTkLabel(main_frame, text='LifeStyle Planner')
+title.pack(padx=10, pady=10)
 
 #------------------------------------------------------>
 #
