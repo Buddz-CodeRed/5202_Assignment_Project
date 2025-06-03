@@ -27,7 +27,7 @@ main_frame = ctk.CTkFrame(root)
 main_frame.pack(fill='both', expand=True)
 
 # main label
-title = ctk.CTkLabel(main_frame, text='LifeStyle Planner')
+title = ctk.CTkLabel(main_frame, text='LifeStyle Planner', font=('Segoe UI', 16, 'bold'))
 title.pack(padx=10, pady=10)
 
 #------------------------------------------------------>
@@ -59,7 +59,7 @@ month_frame = ctk.CTkFrame(dm_frame)
 month_frame.pack(side='left', fill='both', expand=True, padx=(2.5, 0))
 
 # daily label
-daily_title = ctk.CTkLabel(daily_frame, text='My Daily Schedule', font=('Segoe UI', 14))
+daily_title = ctk.CTkLabel(daily_frame, text='My Daily Schedule', font=('Segoe UI', 12, 'bold'))
 daily_title.pack()
 
 # daily list box
@@ -73,7 +73,7 @@ e_list = tk.Listbox(
 e_list.pack(fill='both', expand=True)
 
 # month label
-month_title = ctk.CTkLabel(month_frame, text='My Monthly Overview', font=('Segoe UI', 14))
+month_title = ctk.CTkLabel(month_frame, text='My Monthly Overview', font=('Segoe UI', 12, 'bold'))
 month_title.pack()
 
 # month list box
@@ -95,7 +95,7 @@ fd = ctk.CTkFrame(main_frame, fg_color='transparent')
 fd.pack(fill='x', expand=True, padx=5, pady=(2.5, 2.5))
 
 # form label 1
-f_label1 = ctk.CTkLabel(fd, text='Title', font=('Segoe UI', 14))
+f_label1 = ctk.CTkLabel(fd, text='Title', font=('Segoe UI', 14, 'bold'))
 f_label1.pack(anchor='w',padx=(10, 0), pady=(0, 2.5))
 
 # label 1 entry
@@ -103,7 +103,7 @@ f_entry1 = ctk.CTkEntry(fd, width=200, fg_color="#282828", border_width=2, borde
 f_entry1.pack(side='top',anchor='nw',padx=(10, 5))
 
 # form label 2
-f_label2 = ctk.CTkLabel(fd, text="Description", font=('Segoe UI', 14))
+f_label2 = ctk.CTkLabel(fd, text="Description", font=('Segoe UI', 14, 'bold'))
 f_label2.pack(anchor='w', padx=(10, 0), pady=(10, 2.5))
 
 # label 2 entry
@@ -114,8 +114,21 @@ f_entry2.pack(fill='x', expand=True,anchor='nw',padx=(10, 10), pady=(2.5, 0))
 #   Button section and Frame
 #------------------------------------------------------>
 
-btn_frame = ctk.CTkFrame(main_frame, height=100)
+# frame
+btn_frame = ctk.CTkFrame(main_frame, height=100, fg_color='transparent')
 btn_frame.pack(fill='x', padx=5, pady=(2.5, 5))
+
+# create button
+create_btn = ctk.CTkButton(btn_frame, text='New', font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#539767" ,width=120)
+create_btn.pack(side='left', expand=True, padx=10, pady=5)
+
+# edit button
+edit_btn = ctk.CTkButton(btn_frame, text='Edit', font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#D19D55" ,width=120)
+edit_btn.pack(side='left', expand=True, padx=10, pady=5)
+
+# delete button
+delete_btn = ctk.CTkButton(btn_frame, text='Delete',font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#975353" ,width=120)
+delete_btn.pack(side='left', expand=True, padx=10, pady=5)
 
 #------------------------------------------------------>
 #
