@@ -50,7 +50,7 @@ cal.pack(fill='both', expand=True, padx=5, pady=(5, 10))
 
 # frames
 dm_frame = ctk.CTkFrame(main_frame, fg_color='transparent')
-dm_frame.pack(fill='both', anchor='n', padx=5, pady=2.5)
+dm_frame.pack(fill='both', expand=True, anchor='n', padx=5)
 
 daily_frame = ctk.CTkFrame(dm_frame)
 daily_frame.pack(side='left', fill='both', expand=True, padx=(0, 2.5))
@@ -92,7 +92,7 @@ month_list.pack(fill='both', expand=True)
 
 # frame
 fd = ctk.CTkFrame(main_frame, fg_color='transparent')
-fd.pack(fill='x', expand=True, padx=5, pady=(2.5, 2.5))
+fd.pack(fill='x', expand=True, padx=5, pady=(0, 2.5))
 
 # form label 1
 f_label1 = ctk.CTkLabel(fd, text='Title', font=('Segoe UI', 14, 'bold'))
