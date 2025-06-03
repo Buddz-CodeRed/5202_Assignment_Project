@@ -11,6 +11,13 @@ import os
 root = ctk.CTk()
 root.title('LifeStyle Planner')
 
+ctk.set_appearance_mode('dark')
+ctk.set_default_color_theme('blue')
+
+width = 450
+height = 830
+root.geometry(f"{(width)}x{(height)}")
+
 #------------------------------------------------------>
 #
 #------------------------------------------------------>
