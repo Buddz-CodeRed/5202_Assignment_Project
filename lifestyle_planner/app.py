@@ -8,7 +8,7 @@ import os
 #   Storage file check
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-event_data = 'data.json' # storage file
+event_data = './lifestyle_planner/data.json' # storage file
 
 if not os.path.exists(event_data): # checks if file doesn't exist
     with open(event_data, 'w') as file: # creates a file with write mode

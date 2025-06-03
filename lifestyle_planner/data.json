@@ -1,0 +1,40 @@
+{
+    "6/2/25": [
+        {
+            "Date": "6/2/25",
+            "Title": "testing",
+            "Details": "testing here"
+        },
+        {
+            "Date": "6/2/25",
+            "Title": "hello",
+            "Details": "shoooo"
+        },
+        {
+            "Date": "6/2/25",
+            "Title": "shopping",
+            "Details": "banana"
+        }
+    ],
+    "6/25/25": [
+        {
+            "Date": "6/25/25",
+            "Title": "fdsfdsa",
+            "Details": "fdsfdsafdsafdsa"
+        }
+    ],
+    "6/20/25": [
+        {
+            "Date": "6/20/25",
+            "Title": "hfghgfdhgfd",
+            "Details": "65465436543"
+        }
+    ],
+    "7/16/25": [
+        {
+            "Date": "7/16/25",
+            "Title": "ghfdhgfdhgfdhdf",
+            "Details": "hgfgfdhgfd"
+        }
+    ]
+}
