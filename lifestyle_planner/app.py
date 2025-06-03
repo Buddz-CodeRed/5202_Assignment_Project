@@ -14,6 +14,220 @@ if not os.path.exists(event_data): # checks if file doesn't exist
     with open(event_data, 'w') as file: # creates a file with write mode
         json.dump({}, file) # initialize empty JSON file 
 
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#   Data Functions
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+# CREATE -------------------------------------------
+def create():
+    selected_date = cal.get_date()
+    title = f_entry1.get()
+    details = f_entry2.get('1.0', 'end').strip()
+
+    try: # checking for errors
+        with open(event_data, 'r') as file:
+            events = json.load(file)
+    except json.JSONDecodeError:
+        events = {}
+    
+    # data is checked for, then written to main json file
+    eve_data = {'Date': selected_date, 'Title': title, 'Details': details}
+    if selected_date in events:
+        events[selected_date].append(eve_data)
+    else:
+        events[selected_date] = [eve_data]
+    with open(event_data, 'w') as file:
+        json.dump(events, file, indent=4)
+
+    # call other functions
+    load(selected_date)
+    show_monthly_overview()
+    show_event_detail(0)
+    set_view_behaviour()
+
+# LOAD ----------------------------------------------
+
+def load(selected_date):
+    try:
+        with open(event_data, 'r') as file:
+            events = json.load(file)
+    except (json.JSONDecodeError, FileNotFoundError):
+        events = {}
+    e_list.delete(0, tk.END) # clears list
+    if selected_date in events and events[selected_date]:
+        for ev in events[selected_date]:
+            display_events = f"{ev['Title']}"
+            e_list.insert(tk.END, display_events)
+    else:
+        e_list.insert(tk.END, "No events available")
+
+# DELETE --------------------------------------------
+
+def delete():
+    selection = e_list.curselection() # user selection index from list
+    if selection:
+        idx = selection[0]
+        selected_date = cal.get_date()
+        try:
+            with open(event_data, 'r') as file:
+                events = json.load(file)
+        except (json.JSONDecodeError, FileNotFoundError):
+            events = {}
+
+        if selected_date in events and idx < len(events[selected_date]):
+            del events[selected_date][idx]
+            if not events[selected_date]:
+                del events[selected_date]
+            with open(event_data, 'w') as file:
+                json.dump(events, file, indent=4)
+
+    # call functions
+    load(selected_date)
+    show_monthly_overview()
+    show_event_detail(0)
+    set_view_behaviour()
+
+#  EDIT --------------------------------------------
+
+def edit():
+    selection = e_list.curselection()
+    if selection:
+        idx = selection[0]
+        selected_date = cal.get_date()
+        try:
+            with open(event_data, 'r') as file:
+                events = json.load(file)
+        except (json.JSONDecodeError, FileNotFoundError):
+            events = {}
+        
+        if selected_date in events and idx < len(events[selected_date]):
+            ev = events[selected_date][idx]
+            set_edit_behaviour() # call function
+            f_entry1.delete(0, tk.END)
+            f_entry1.insert(0, ev['Title'])
+            f_entry2.delete('1.0', tk.END)
+            f_entry2.insert('1.0', ev['Details'])
+
+            edit_btn.configure(text='Save', command=lambda: confirm_edit(idx))
+            create_btn.configure(state='disabled')
+            delete_btn.configure(state='disabled')
+
+def confirm_edit(idx):
+    selected_date = cal.get_date()
+    title = f_entry1.get()
+    details = f_entry2.get('1.0', 'end').strip() # text from line 1, character 0 ('1.0) to 'end'
+    try:
+        with open(event_data, 'r') as file:
+            events = json.load(file)
+    except (json.JSONDecodeError, FileNotFoundError):
+        events = {}
+
+    if selected_date in events and idx < len(events[selected_date]):
+        events[selected_date][idx]['Title'] = title
+        events[selected_date][idx]['Details'] = details
+        with open(event_data, 'w') as file:
+            json.dump(events, file, indent=4)
+
+    load(selected_date)
+    show_monthly_overview()
+    show_event_detail(idx)
+    set_view_behaviour()
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#   Set Function Behaviour 
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+def set_create_behaviour():
+    f_label1.pack(anchor='w', padx=10)
+    f_entry1.pack(side='top',anchor='nw', padx=10)
+    f_label2.pack(anchor='w', padx=10)
+    f_entry2.pack(side='bottom',fill='x', expand=True , padx=10, pady=10)
+    
+    f_entry1.configure(state='normal')
+    f_entry2.configure(state='normal')
+
+    f_entry1.delete(0, tk.END)
+    f_entry2.delete('1.0', tk.END)
+
+    create_btn.configure(text='Save', command=create)
+    edit_btn.configure(state='disabled')
+    delete_btn.configure(state='disabled')
+
+def new_button_pressed(): # new button triggers function call
+    set_create_behaviour()
+
+def set_edit_behaviour():
+    f_label1.pack(anchor='w', padx=10)
+    f_entry1.pack(side='top',anchor='w', padx=10)
+    f_label2.pack(anchor='w', padx=10)
+    f_entry2.pack(side='bottom', fill='x', expand=True , padx=10, pady=10)
+    
+    f_entry1.configure(state='normal')
+    f_entry2.configure(state='normal')    
+    create_btn.configure(state='disabled')
+    delete_btn.configure(state='disabled')
+
+def set_view_behaviour():
+    f_label1.pack_forget()
+    f_entry1.pack_forget()
+    f_label2.pack_forget()
+    f_entry2.pack_forget()
+    f_entry2.pack(fill='both', expand=True, padx=10, pady=10)
+    f_entry2.configure(state='disabled')
+    create_btn.configure(text='Create', command=new_button_pressed, state='normal')
+    edit_btn.configure(text='Edit', command=edit, state='normal')
+    delete_btn.configure(state='normal')
+
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#   Set Function Behaviour End
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   
+
+#   Display---------------------------------------------
+
+def show_event_detail(index):
+    selected_date = cal.get_date()
+    try:
+        with open(event_data, 'r') as file:
+            events = json.load(file)
+    except (json.JSONDecodeError, FileNotFoundError):
+        events = {}
+
+    f_entry2.configure(state='normal')
+    f_entry2.delete('1.0', tk.END)
+    if selected_date in events and index < len(events[selected_date]):
+        ev = events[selected_date][index]
+        detail_text = f"Date: {ev['Date']}\nTitle: {ev['Title']}\nDescription: {ev['Details']}"
+        f_entry2.insert('1.0', detail_text)
+    else:
+        f_entry2.insert('1.0', "No data saved here yet")
+    
+    f_entry2.configure(state='disabled')
+    set_view_behaviour()
+
+# Monthly Overview -------------------------------------
+
+def show_monthly_overview():
+    month_list.configure(state='normal')
+    month_list.delete(0, tk.END)
+    selected_date = cal.get_date()
+    selected_month = selected_date.split('/')[0]
+    try:
+        with open(event_data, 'r') as file:
+            events = json.load(file)
+    except (json.JSONDecodeError, FileExistsError):
+        events = {}
+
+    for date, day_events in events.items():
+        if date.split('/')[0] == selected_month:
+            for ev in day_events:
+                title = ev.get('Title', 'No Title')
+                date_str = ev.get('Date', date)
+                event_summuary = f'{date_str}: {title}'
+                month_list.insert(tk.END, event_summuary)
+    month_list.configure(state='disabled')
+
 #------------------------------------------------------>
 #   Setup GUI window
 #------------------------------------------------------>
@@ -37,8 +251,8 @@ main_frame = ctk.CTkFrame(root)
 main_frame.pack(fill='both', expand=True)
 
 # main label
-title = ctk.CTkLabel(main_frame, text='LifeStyle Planner', font=('Segoe UI', 16, 'bold'))
-title.pack(padx=10, pady=10)
+main_title = ctk.CTkLabel(main_frame, text='LifeStyle Planner', font=('Segoe UI', 16, 'bold'))
+main_title.pack(padx=10, pady=10)
 
 #------------------------------------------------------>
 #   Calendar
@@ -53,6 +267,7 @@ cal = Calendar(main_frame,
                 foreground="#B3B7B9"              
                 )
 cal.pack(fill='both', expand=True, padx=5, pady=(5, 10))
+cal.bind("<<CalendarSelected>>", lambda event: update_event_display())
 
 #------------------------------------------------------>
 #   Daily & Monthly lists & Frames
@@ -76,9 +291,11 @@ daily_title.pack()
 e_list = tk.Listbox(
     daily_frame,
     bg="#393A3C",
-    fg="#B3B7B9",
+    fg="#DADBDB",
     highlightbackground='#333333',
-    relief='flat'    
+    selectbackground="#434f6b",
+    relief='flat',
+    font=('Segoe UI', 12)    
 )
 e_list.pack(fill='both', expand=True)
 
@@ -92,7 +309,9 @@ month_list = tk.Listbox(
     bg="#393A3C",
     fg="#B3B7B9",
     highlightbackground='#333333',
-    relief='flat'    
+    selectbackground="#434f6b",
+    relief='flat',
+    font=('Segoe UI', 12)       
 )
 month_list.pack(fill='both', expand=True)
 
@@ -129,26 +348,28 @@ btn_frame = ctk.CTkFrame(main_frame, height=100, fg_color='transparent')
 btn_frame.pack(fill='x', padx=5, pady=(2.5, 5))
 
 # create button
-create_btn = ctk.CTkButton(btn_frame, text='New', font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#539767" ,width=120)
+create_btn = ctk.CTkButton(btn_frame, text='New', font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#539767" , width=120, command=create)
 create_btn.pack(side='left', expand=True, padx=10, pady=5)
 
 # edit button
-edit_btn = ctk.CTkButton(btn_frame, text='Edit', font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#D19D55" ,width=120)
+edit_btn = ctk.CTkButton(btn_frame, text='Edit', font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#D19D55" ,width=120, command=edit)
 edit_btn.pack(side='left', expand=True, padx=10, pady=5)
 
 # delete button
-delete_btn = ctk.CTkButton(btn_frame, text='Delete',font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#975353" ,width=120)
+delete_btn = ctk.CTkButton(btn_frame, text='Delete',font=('Segoe UI', 12, 'bold'), fg_color="#535354", hover_color="#975353" ,width=120, command=delete)
 delete_btn.pack(side='left', expand=True, padx=10, pady=5)
 
-#------------------------------------------------------>
-#
-#------------------------------------------------------>
+def update_event_display():
+    selected_date = cal.get_date()
+    load(selected_date)
+    show_monthly_overview()
+    if e_list.size() > 0:
+        e_list.selection_clear(0, tk.END)
+        e_list.selection_set(0)
+        show_event_detail(0)
+    else:
+        show_event_detail(0)
 
-#------------------------------------------------------>
-#
-#------------------------------------------------------>
-
-#------------------------------------------------------>
-#
-#------------------------------------------------------>
+update_event_display()
+set_view_behaviour()
 root.mainloop()
