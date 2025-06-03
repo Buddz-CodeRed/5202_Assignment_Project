@@ -40,10 +40,44 @@ cal = Calendar(main_frame,
                 background="#2e3036",
                 foreground="#B3B7B9"              
                 )
-cal.pack(fill='x', expand=True, padx=5, pady=5)
+cal.pack(fill='both', expand=True, padx=5, pady=5)
+
+#------------------------------------------------------>
+#   Daily & Monthly lists & Frames
+#------------------------------------------------------>
+
+dm_frame = ctk.CTkFrame(main_frame)
+dm_frame.pack(fill='both', anchor='n', padx=5, pady=5)
+
+daily_frame = ctk.CTkFrame(dm_frame)
+daily_frame.pack(side='left', fill='both', expand=True, padx=(5, 2.5), pady=5)
+
+month_frame = ctk.CTkFrame(dm_frame)
+month_frame.pack(side='left', fill='both', expand=True, padx=(2.5, 5), pady=5)
+
+#------------------------------------------------------>
+#   Form/Detail section and Frame
+#------------------------------------------------------>
+
+fd = ctk.CTkFrame(main_frame)
+fd.pack(fill='both', expand=True, padx=5, pady=(2.5, 2.5))
+
+#------------------------------------------------------>
+#   Button section and Frame
+#------------------------------------------------------>
+
+btn_frame = ctk.CTkFrame(main_frame, height=100)
+btn_frame.pack(fill='x', padx=5, pady=(2.5, 5))
 
 #------------------------------------------------------>
 #
 #------------------------------------------------------>
 
+#------------------------------------------------------>
+#
+#------------------------------------------------------>
+
+#------------------------------------------------------>
+#
+#------------------------------------------------------>
 root.mainloop()
