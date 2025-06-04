@@ -8,7 +8,7 @@ import os
 #   Storage file check
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-event_data = './lifestyle_planner/data.json' # storage file
+event_data = './data/data.json' # storage file
 
 if not os.path.exists(event_data): # checks if file doesn't exist
     with open(event_data, 'w') as file: # creates a file with write mode
@@ -21,14 +21,14 @@ if not os.path.exists(event_data): # checks if file doesn't exist
 
 # CREATE -------------------------------------------
 def create():
-    selected_date = cal.get_date()
-    title = f_entry1.get()
-    details = f_entry2.get('1.0', 'end').strip()
+    selected_date = cal.get_date() # Retrieves selected date
+    title = f_entry1.get()  # Gets user input
+    details = f_entry2.get('1.0', 'end').strip() # retrieves user input and removes spaces or blank lines at either side of the text
 
-    try: # checking for errors
-        with open(event_data, 'r') as file:
-            events = json.load(file)
-    except json.JSONDecodeError:
+    try: # handles any errors while the block is executed
+        with open(event_data, 'r') as file: # opens file into read mode
+            events = json.load(file) # loads file
+    except json.JSONDecodeError: # catches errors and returns and error
         events = {}
     
     # data is checked for, then written to main json file
@@ -67,7 +67,7 @@ def load(selected_date):
 def delete():
     selection = e_list.curselection() # user selection index from list
     if selection:
-        idx = selection[0]
+        item = selection[0]
         selected_date = cal.get_date()
         try:
             with open(event_data, 'r') as file:
@@ -75,8 +75,8 @@ def delete():
         except (json.JSONDecodeError, FileNotFoundError):
             events = {}
 
-        if selected_date in events and idx < len(events[selected_date]):
-            del events[selected_date][idx]
+        if selected_date in events and item < len(events[selected_date]):
+            del events[selected_date][item]
             if not events[selected_date]:
                 del events[selected_date]
             with open(event_data, 'w') as file:
@@ -93,7 +93,7 @@ def delete():
 def edit():
     selection = e_list.curselection()
     if selection:
-        idx = selection[0]
+        item = selection[0]
         selected_date = cal.get_date()
         try:
             with open(event_data, 'r') as file:
@@ -101,19 +101,19 @@ def edit():
         except (json.JSONDecodeError, FileNotFoundError):
             events = {}
         
-        if selected_date in events and idx < len(events[selected_date]):
-            ev = events[selected_date][idx]
+        if selected_date in events and item < len(events[selected_date]):
+            ev = events[selected_date][item]
             set_edit_behaviour() # call function
             f_entry1.delete(0, tk.END)
             f_entry1.insert(0, ev['Title'])
             f_entry2.delete('1.0', tk.END)
             f_entry2.insert('1.0', ev['Details'])
 
-            edit_btn.configure(text='Save', command=lambda: confirm_edit(idx))
+            edit_btn.configure(text='Save', command=lambda: confirm_edit(item))
             create_btn.configure(state='disabled')
             delete_btn.configure(state='disabled')
 
-def confirm_edit(idx):
+def confirm_edit(item):
     selected_date = cal.get_date()
     title = f_entry1.get()
     details = f_entry2.get('1.0', 'end').strip() # text from line 1, character 0 ('1.0) to 'end'
@@ -123,15 +123,15 @@ def confirm_edit(idx):
     except (json.JSONDecodeError, FileNotFoundError):
         events = {}
 
-    if selected_date in events and idx < len(events[selected_date]):
-        events[selected_date][idx]['Title'] = title
-        events[selected_date][idx]['Details'] = details
+    if selected_date in events and item < len(events[selected_date]):
+        events[selected_date][item]['Title'] = title
+        events[selected_date][item]['Details'] = details
         with open(event_data, 'w') as file:
             json.dump(events, file, indent=4)
 
     load(selected_date)
     show_monthly_overview()
-    show_event_detail(idx)
+    show_event_detail(item)
     set_view_behaviour()
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -154,7 +154,7 @@ def set_create_behaviour():
     edit_btn.configure(state='disabled')
     delete_btn.configure(state='disabled')
 
-def new_button_pressed(): # new button triggers function call
+def new_button_pressed(): # create button triggers function call
     set_create_behaviour()
 
 def set_edit_behaviour():
