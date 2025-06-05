@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 from tkcalendar import Calendar
+import datetime
 import json
 import os
 
@@ -286,12 +287,17 @@ cal = Calendar(main_frame,
                 cursor='hand2',
                 font=('Segoe UI', 14),
                 selectmode='day',
-                background="#2e3036",
-                foreground="#B3B7B9"              
+                background="#363a47ff",
+                foreground="#B3B7B9FF"              
                 )
 cal.pack(fill='both', expand=True, padx=5, pady=(5, 10))
 cal.bind("<<CalendarSelected>>", lambda event: update_event_display())
 
+# highlight current date
+
+today = datetime.date.today()
+cal.calevent_create(today, 'today_tag', 'Today')
+cal.tag_config('today_tag', background="#f90404", foreground='black')
 #------------------------------------------------------>
 #   Daily & Monthly lists & Frames
 #------------------------------------------------------>
