@@ -2,6 +2,7 @@ import tkinter as tk
 import customtkinter as ctk
 from tkcalendar import Calendar
 import datetime
+import time
 import json
 import os
 
@@ -255,6 +256,18 @@ width = 450
 height = 830
 root.geometry(f"{(width)}x{(height)}")
 
+
+# add clock
+def update_time():
+    current_time = time.strftime('%H:%M:%S')
+    time_label.configure(text=f'{current_time}')
+    root.after(1000, update_time)
+
+time_label = ctk.CTkLabel(main_frame, text='', font=('Segoe UI', 16))
+time_label.place(x=375, y=10)
+
+update_time()
+
 # Change theme toggle
 is_dark = True  # Track current theme mode
 
@@ -294,10 +307,10 @@ cal.pack(fill='both', expand=True, padx=5, pady=(5, 10))
 cal.bind("<<CalendarSelected>>", lambda event: update_event_display())
 
 # highlight current date
-
 today = datetime.date.today()
 cal.calevent_create(today, 'today_tag', 'Today')
 cal.tag_config('today_tag', background="#f90404", foreground='black')
+
 #------------------------------------------------------>
 #   Daily & Monthly lists & Frames
 #------------------------------------------------------>
@@ -407,6 +420,7 @@ def update_event_display():
     else:
         show_event_detail(0)
 
+update_time()
 update_event_display()
 set_view_behaviour()
 root.mainloop()
