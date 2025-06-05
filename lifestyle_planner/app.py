@@ -248,7 +248,7 @@ main_frame = ctk.CTkFrame(root)
 main_frame.pack(fill='both', expand=True)
 
 # main label
-main_title = ctk.CTkLabel(main_frame, text='LifeStyle Planner', font=('Segoe UI', 16, 'bold'))
+main_title = ctk.CTkLabel(main_frame, text='LifeStyle Planner', font=('Segoe UI', 20, 'bold'))
 main_title.pack(padx=10, pady=10)
 
 # set dimensions
@@ -289,7 +289,7 @@ toggle = ctk.CTkRadioButton(
     text='Theme',  # Button label
     command=toggle_theme  # Function to call on click
 )
-toggle.place(x=10, y=10)  # Position the button in the window
+toggle.place(x=10, y=15)  # Position the button in the window
 
 #------------------------------------------------------>
 #   Calendar
