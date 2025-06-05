@@ -259,12 +259,12 @@ root.geometry(f"{(width)}x{(height)}")
 
 # add clock
 def update_time():
-    current_time = time.strftime('%H:%M:%S')
+    current_time = time.strftime('%H:%M %p')
     time_label.configure(text=f'{current_time}')
     root.after(1000, update_time)
 
 time_label = ctk.CTkLabel(main_frame, text='', font=('Segoe UI', 16))
-time_label.place(x=375, y=10)
+time_label.place(x=370, y=10)
 
 update_time()
 
