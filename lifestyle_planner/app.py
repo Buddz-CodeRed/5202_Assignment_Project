@@ -190,43 +190,42 @@ def set_view_behaviour():
 def show_event_detail(index):
     selected_date = cal.get_date()  # Get the currently selected date from the calendar
     try:
-        with open(event_data, 'r') as file:  # Try to open the events data file for reading
-            events = json.load(file)  # Load the events from the JSON file
+        with open(event_data, 'r') as file:
+            events = json.load(file)  
     except (json.JSONDecodeError, FileNotFoundError):
         events = {}  # If file is missing or invalid, use an empty dictionary
 
     f_entry2.configure(state='normal')  # Enable the details textbox for editing
-    f_entry2.delete('1.0', tk.END)  # Clear any existing text in the details textbox
+    f_entry2.delete('1.0', tk.END)  
     if selected_date in events and index < len(events[selected_date]):  # Check if there are events for the selected date and valid index
         ev = events[selected_date][index]  # Get the event at the specified index
-        detail_text = f"Date: {ev['Date']}\nTitle: {ev['Title']}\nDescription: {ev['Details']}"  # Format the event details
-        f_entry2.insert('1.0', detail_text)  # Insert the formatted details into the textbox
-    else:
-        f_entry2.insert('1.0', "No data saved here yet")  # Show a message if no event is found
+        detail_text = f"Date: {ev['Date']}\nTitle: {ev['Title']}\nDescription: {ev['Details']}"  
+        f_entry2.insert('1.0', detail_text)  
+        f_entry2.insert('1.0', "No data saved here yet") 
     
     f_entry2.configure(state='disabled')  # Disable the textbox to prevent editing
-    set_view_behaviour()  # Set the view mode for the form
+    set_view_behaviour()  
 
 # Monthly Overview -------------------------------------
 
 def show_monthly_overview():
     month_list.configure(state='normal')  # Enable the month_list for editing
     month_list.delete(0, tk.END)  # Clear all items in the month_list
-    selected_date = cal.get_date()  # Get the currently selected date from the calendar
+    selected_date = cal.get_date()  
     selected_month = selected_date.split('/')[0]  # Extract the month part from the selected date
     try:
-        with open(event_data, 'r') as file:  # Open the events data file for reading
-            events = json.load(file)  # Load the events from the JSON file
+        with open(event_data, 'r') as file:  
+            events = json.load(file)  
     except (json.JSONDecodeError, FileNotFoundError):
         events = {}  # If file is missing or invalid, use an empty dictionary
 
-    for date, day_events in events.items():  # Iterate over all dates and their events
+    for date, day_events in events.items():  
         date_month = date.split('/')[0]  # Extract the month part from the event date
-        if date_month == selected_month:  # If the event is in the selected month
-            for ev in day_events:  # Iterate over each event on that date
-                title = ev.get('Title', 'No Title')  # Get the event title, default to 'No Title'
+        if date_month == selected_month:  
+            for ev in day_events: 
+                title = ev.get('Title', 'No Title')  
                 date_str = ev.get('Date', date)  # Get the event date string
-                event_summuary = f'{date_str}: {title}'  # Format the summary string
+                event_summuary = f'{date_str}: {title}'  
                 month_list.insert(tk.END, event_summuary)  # Add the summary to the month_list
     
     month_list.configure(state='disabled')  # Disable the month_list to prevent editing
@@ -248,7 +247,7 @@ main_frame = ctk.CTkFrame(root)
 main_frame.pack(fill='both', expand=True)
 
 # main label
-main_title = ctk.CTkLabel(main_frame, text='LifeStyle Planner', font=('Segoe UI', 20, 'bold'))
+main_title = ctk.CTkLabel(main_frame, text='LifeStyle Planner', font=('Segoe UI', 16, 'bold'))
 main_title.pack(padx=10, pady=10)
 
 # set dimensions
@@ -259,11 +258,11 @@ root.geometry(f"{(width)}x{(height)}")
 
 # add clock
 def update_time():
-    current_time = time.strftime('%H:%M %p')
-    time_label.configure(text=f'{current_time}')
-    root.after(1000, update_time)
+    current_time = time.strftime('%H:%M %p') # formats the display of the clock with am/pm
+    time_label.configure(text=f'{current_time}') # formats time to str
+    root.after(1000, update_time) # updates every second
 
-time_label = ctk.CTkLabel(main_frame, text='', font=('Segoe UI', 16))
+time_label = ctk.CTkLabel(main_frame, text='', font=('Segoe UI', 16, 'bold'))
 time_label.place(x=370, y=10)
 
 update_time()
@@ -295,15 +294,18 @@ toggle.place(x=10, y=15)  # Position the button in the window
 #   Calendar
 #------------------------------------------------------>
 
-cal = Calendar(main_frame,
-                width=400,
-                cursor='hand2',
-                font=('Segoe UI', 14),
-                selectmode='day',
-                background="#363a47ff",
-                foreground="#B3B7B9FF"              
-                )
+cal = Calendar(
+    main_frame,
+    width=400,
+    cursor='hand2',
+    font=('Segoe UI', 14),
+    selectmode='day',
+    show='month',  # Ensure month and year header is shown
+    background="#2e3036",
+    foreground="#b3b7b9"
+)
 cal.pack(fill='both', expand=True, padx=5, pady=(5, 10))
+
 cal.bind("<<CalendarSelected>>", lambda event: update_event_display())
 
 # highlight current date
