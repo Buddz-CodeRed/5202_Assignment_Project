@@ -200,8 +200,10 @@ def show_event_detail(index):
     if selected_date in events and index < len(events[selected_date]):  # Check if there are events for the selected date and valid index
         ev = events[selected_date][index]  # Get the event at the specified index
         detail_text = f"Date: {ev['Date']}\nTitle: {ev['Title']}\nDescription: {ev['Details']}"  
-        f_entry2.insert('1.0', detail_text)  
-        f_entry2.insert('1.0', "No data saved here yet") 
+        if detail_text.strip():  # Check if detail_text is not empty
+            f_entry2.insert('1.0', detail_text)  
+        else:
+            f_entry2.insert('1.0', "No data saved here yet") 
     
     f_entry2.configure(state='disabled')  # Disable the textbox to prevent editing
     set_view_behaviour()  
